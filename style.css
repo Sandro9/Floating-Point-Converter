@@ -1,0 +1,20 @@
+body {
+    text-align: center;
+}
+h1 {
+    color:coral
+}
+#error {
+    color:white;
+    background-color: red;
+    font-weight: 700;
+    font-size:large;
+}
+
+.alert
+{
+    color:red;
+    font-size: larger;
+    font-weight: 700;
+
+}

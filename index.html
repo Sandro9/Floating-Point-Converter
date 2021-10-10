@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floating Point Converter</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <h1>Floating Point Converter</h1>
+    <div>
+        <div>
+            <span id="error"></span>
+            <br>
+            <br>
+
+            <label for="mode">Mode
+                <select id="mode">
+                    <option>float</option>
+                    <option>double</option>
+                </select>
+            </label>
+            <button onclick="window.convertFloatingPoint()">start</button>
+            Dezimal<input value="10,1" type="text" id="input">
+        </div>        
+        <hr>
+        <div>
+            Hexa: <input disabled id="hex"><br>
+            Binary: <input disabled id="bin">
+        </div>
+    </div>
+    <div>
+        step 1 Convert to Dual:
+        <div id="resultStep1"></div>
+        step 2 Normalize:
+        <div id="resultStep2"></div>
+    </div>
+    <script type="module">
+        import ConverterFactory from "./common/ConverterFactory.js";
+        import InvalidMode from "./Error/InvalidMode.js";
+        import Normalizer from "./common/Normalizer.js";
+
+        var resultStep1 = document.getElementById("resultStep1");
+        var resultStep2 = document.getElementById("resultStep2");
+        var error = document.getElementById("error");
+        var input = document.getElementById("input");
+        var mode = document.getElementById("mode");
+
+
+        globalThis.convertFloatingPoint = (() => {
+            let number = input.value;
+            let modeType = mode.value;
+            console.log(modeType);
+            try {
+                let ConverterFactoryClass = new ConverterFactory(input);
+                let result = ConverterFactoryClass.convert(number,modeType);
+
+                resultStep1.innerHTML = "";
+                console.log(result);
+                result.dual.beforeComma.show().reverse().forEach((e,idx) => {
+                    if(idx % 4 == 0){
+                        resultStep1.innerHTML += ".";
+                    }
+                    resultStep1.innerHTML += e;
+                });
+                if(result.dual.afterComma.number.binary.length !== 0)
+                {
+                    resultStep1.innerHTML += "<span class='alert'>|</span>";
+                }
+                result.dual.afterComma.show().forEach((e,idx) => {
+                    if(idx % 4 == 0){
+                        resultStep1.innerHTML += ".";
+                    }
+                    resultStep1.innerHTML += e;
+                });
+
+                
+
+                var normalizer = new Normalizer();
+                console.log(result.dual.complete);
+                var normalizedResult = normalizer.normalize(result.dual.complete,result.dual.floatingPoint);
+
+                console.log(normalizedResult);
+                
+                resultStep2.innerHTML = "";
+                resultStep2.innerHTML += "<strong>Character</strong>"
+                normalizedResult.character.character.dual.forEach((e,idx) => {
+                    if(idx % 4 == 0){
+                        resultStep2.innerHTML += ".";
+                    }
+                    resultStep2.innerHTML += e;
+                });
+
+                resultStep2.innerHTML += "<strong>Mantisse</strong>"
+                normalizedResult.mantisse.mantisse.dual.forEach((e,idx) => {
+                    if(idx % 4 == 0){
+                        resultStep2.innerHTML += ".";
+                    }
+                    resultStep2.innerHTML += e;
+                });
+
+            } catch(e) {
+                if(!e instanceof InvalidMode)
+                {
+                    console.log(e);
+                    throw new Error(e.message);
+                }
+                console.log(e);
+
+                error.innerHTML = e.message;
+            }
+           
+
+        });
+    </script>
+</body>
+</html>
