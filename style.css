@@ -1,8 +1,6 @@
-body {
-    text-align: center;
-}
 h1 {
-    color:coral
+    color:coral;
+    text-align:center;
 }
 #error {
     color:white;
