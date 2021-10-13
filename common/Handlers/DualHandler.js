@@ -12,7 +12,6 @@ export default class DualHandler extends Handler
 
     convertToDual(number,callback = ((e) => {}))
     {
-        callback();
         var numberSplitted = this.splitString(number);
         var beforeComma = this.beforeComma(numberSplitted.beforeComma,callback);
         var afterComma = this.afterComma("0."+numberSplitted.afterComma,callback);
@@ -47,7 +46,8 @@ export default class DualHandler extends Handler
             callback({
                 type:"afterComma",
                 round: round,
-                number: dualNumber
+                number: dualNumber,
+                currentNr: number
             });
             round++;
         }
@@ -72,7 +72,9 @@ export default class DualHandler extends Handler
             callback({
                 type:"beforeComma",
                 round: round,
-                number: dualNumber
+                number: dualNumber,
+                rest : number % 2,
+                currentNr: number
             });
             number = parseInt(number / 2);
             round++;

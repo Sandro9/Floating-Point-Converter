@@ -44,14 +44,14 @@
                     </div>
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
+                            <input type="checkbox" id="e7">
+                            <input type="checkbox" id="e6">
+                            <input type="checkbox" id="e5">
+                            <input type="checkbox" id="e4">
+                            <input type="checkbox" id="e3">
+                            <input type="checkbox" id="e2">
+                            <input type="checkbox" id="e1">
+                            <input type="checkbox" id="e0">
 
                         </div>
                     </div>
@@ -67,29 +67,29 @@
                     </div>
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
-                            <input type="checkbox">
+                            <input type="checkbox" id="m0">
+                            <input type="checkbox" id="m1">
+                            <input type="checkbox" id="m2">
+                            <input type="checkbox" id="m3">
+                            <input type="checkbox" id="m4">
+                            <input type="checkbox" id="m5"> 
+                            <input type="checkbox" id="m6">
+                            <input type="checkbox" id="m7">
+                            <input type="checkbox" id="m8">
+                            <input type="checkbox" id="m9">
+                            <input type="checkbox" id="m10">
+                            <input type="checkbox" id="m11">
+                            <input type="checkbox" id="m12">
+                            <input type="checkbox" id="m13">
+                            <input type="checkbox" id="m14">
+                            <input type="checkbox" id="m15">
+                            <input type="checkbox" id="m16">
+                            <input type="checkbox" id="m17">
+                            <input type="checkbox" id="m18">
+                            <input type="checkbox" id="m19">
+                            <input type="checkbox" id="m20">
+                            <input type="checkbox" id="m21">
+                            <input type="checkbox" id="m22">
 
                         </div>
                     </div>
@@ -112,7 +112,7 @@
                     </div>
                     <div class="row  py-1">
                         <div class="col-md-3 d-flex align-self-center">
-                            <label for="valueInFloat">Value actually stored in float: </label>
+                            <label for="valueInFloat">Value actually stored in float(normalized): </label>
                         </div>
                         <div class="col">
                             <input id="valueInFloat" type="text" class="form-control">
@@ -120,7 +120,7 @@
                     </div>
                     <div class="row py-1">
                         <div class="col-md-3 d-flex align-self-center">
-                            <label for="binary">Binary Representation</label>
+                            <label for="binary">Binary Representation(non normalized)</label>
                         </div>
                         <div class="col">
                             <input id="binary" type="text" class="form-control">
@@ -152,7 +152,14 @@
                     </h2>
                     <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
-                             <div id="resultStep1"></div>
+                            At first convert your decimal Number into a Binary Number
+                            <span>We devide our Decimal before comma Number by 2 the Rest is our Binary Digit</span>
+                            <div id="resultStep1"></div>
+                            <div >We get the following binary digit: <span id="resultStep1Result"></span></div>
+                            <br>
+                            <span>We do the same for the after comma, this Time we multiply by 2</span>
+                            <div id="resultStep2"></div>
+                            <div>After we did that we get the following Result: <span id="resultStep2Result"></span></div>
                         </div>
                     </div>
                 </div>
@@ -190,30 +197,63 @@
         import Float from "./common/Interfaces/Configs/Float.js";
 
         var resultStep1 = document.getElementById("resultStep1");
+        var resultStep1Result = document.getElementById("resultStep1Result");
+
         var resultStep2 = document.getElementById("resultStep2");
+        var resultStep2Result = document.getElementById("resultStep2Result");
+        var resultStep3 = document.getElementById("resultStep2");
         var error = document.getElementById("error");
         var input = document.getElementById("decimal");
+
+
+        var valueInFloat = document.getElementById("valueInFloat");
+        var binary = document.getElementById("binary");
         // var mode = document.getElementById("mode");
 
 
         globalThis.convertFloatingPoint = (() => {
             let number = input.value;
-            // let modeType = mode.value;
+            resultStep1.innerHTML = "";
+            resultStep2.innerHTML = "";
+            resultStep3.innerHTML = "";
+
             let float = new Float();
             let converterFactory = new ConverterFactory();
             let converter = converterFactory.getConverter("dual");
-            let dualNumber = converter.convertToDual(number,((e) => {
-                // console.log(e);
+            let dualNumber = converter.convertToDual(number,((event) => {
+                if(event.type === 'beforeComma'){
+                    resultStep1.innerHTML += event.currentNr + " / " + 2 +" =" + (event.currentNr / 2) + " R "+event.rest + "<br>";
+                } else {
+                    resultStep2.innerHTML += parseFloat(event.currentNr).toPrecision(2) + " * " + 2 + " =" + parseFloat(event.currentNr * 2).toPrecision(2) + " R "+ event.number + "<br>";
+                }
             }));
-
+            resultStep1Result.innerHTML = dualNumber.beforeComma.number.binary.join("");
+            resultStep2Result.innerHTML = dualNumber.afterComma.number.binary.join("");
+            console.log(dualNumber);
             let normalizer = new Normalizer();
             let normalized = normalizer.normalize(float,dualNumber.complete,dualNumber.floatingPoint)
-            // console.log(dualNumber);
             console.log(normalized);
-            // console.log(converter);
-            
 
+
+            setCheckBoxes("e",normalized.character);
+            setCheckBoxes("m",normalized.mantisse);
+            binary.value = dualNumber.complete.join("");
+            valueInFloat.value = (normalized.character.join(""))+""+ (normalized.mantisse.join(""))
         });
+
+        function setCheckBoxes(checkboxType,dualNr)
+        {
+            console.log(dualNr);
+            dualNr.forEach((e,idx) => {
+                let checkbox = document.getElementById(checkboxType+idx);
+                if(e === 1)
+                {
+                    checkbox.checked = true;
+                } else {
+                    checkbox.checked = false;
+                }
+            })
+        }
     </script>
 </body>
 </html>
