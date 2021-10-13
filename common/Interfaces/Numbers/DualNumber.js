@@ -1,8 +1,8 @@
-import Number from "./Number.js";
+import Number from "../../Abstract/Number.js";
 export default class DualNumber extends Number
 {
     number = {
-        length : 0,
+        length : null,
         binary : []
     }
 

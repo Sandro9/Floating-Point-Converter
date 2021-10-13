@@ -1,7 +1,7 @@
 export default class Character
 {
     character = {
-        length: 0,
+        length: null,
         dual: []
     }
 

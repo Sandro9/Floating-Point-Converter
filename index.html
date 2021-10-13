@@ -152,7 +152,7 @@
                     </h2>
                     <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
-                            Hallo <div id="resultStep1"></div>
+                             <div id="resultStep1"></div>
                         </div>
                     </div>
                 </div>
@@ -164,7 +164,7 @@
                     </h2>
                     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                        Hallo <div id="resultStep2"></div>
+                        Test <div id="resultStep2"></div>
                     </div>
                     </div>
                 </div>
@@ -176,7 +176,6 @@
                     </h2>
                     <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                        <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
                     </div>
                     </div>
                 </div>
@@ -185,9 +184,10 @@
     </div>
     
     <script type="module">
-        import ConverterFactory from "./common/ConverterFactory.js";
-        import InvalidMode from "./Error/InvalidMode.js";
-        import Normalizer from "./common/Normalizer.js";
+        import ConverterFactory from "./common/Controllers/ConverterFactory.js";
+        import Normalizer from "./common/Controllers/Normalizer.js";
+        import Double from "./common/Interfaces/Configs/Double.js";
+        import Float from "./common/Interfaces/Configs/Float.js";
 
         var resultStep1 = document.getElementById("resultStep1");
         var resultStep2 = document.getElementById("resultStep2");
@@ -199,67 +199,19 @@
         globalThis.convertFloatingPoint = (() => {
             let number = input.value;
             // let modeType = mode.value;
-            let modeType = "float"
-            console.log(modeType);
-            try {
-                let ConverterFactoryClass = new ConverterFactory(input);
-                let result = ConverterFactoryClass.convert(number,modeType);
+            let float = new Float();
+            let converterFactory = new ConverterFactory();
+            let converter = converterFactory.getConverter("dual");
+            let dualNumber = converter.convertToDual(number,((e) => {
+                // console.log(e);
+            }));
 
-                resultStep1.innerHTML = "";
-                console.log(result);
-                result.dual.beforeComma.show().reverse().forEach((e,idx) => {
-                    if(idx % 4 == 0){
-                        resultStep1.innerHTML += ".";
-                    }
-                    resultStep1.innerHTML += e;
-                });
-                if(result.dual.afterComma.number.binary.length !== 0)
-                {
-                    resultStep1.innerHTML += "<span class='alert'>|</span>";
-                }
-                result.dual.afterComma.show().forEach((e,idx) => {
-                    if(idx % 4 == 0){
-                        resultStep1.innerHTML += ".";
-                    }
-                    resultStep1.innerHTML += e;
-                });
-
-                
-
-                var normalizer = new Normalizer();
-                console.log(result.dual.complete);
-                var normalizedResult = normalizer.normalize(result.dual.complete,result.dual.floatingPoint);
-
-                console.log(normalizedResult);
-                
-                resultStep2.innerHTML = "";
-                resultStep2.innerHTML += "<strong>Character</strong>"
-                normalizedResult.character.character.dual.forEach((e,idx) => {
-                    if(idx % 4 == 0){
-                        resultStep2.innerHTML += ".";
-                    }
-                    resultStep2.innerHTML += e;
-                });
-
-                resultStep2.innerHTML += "<strong>Mantisse</strong>"
-                normalizedResult.mantisse.mantisse.dual.forEach((e,idx) => {
-                    if(idx % 4 == 0){
-                        resultStep2.innerHTML += ".";
-                    }
-                    resultStep2.innerHTML += e;
-                });
-
-            } catch(e) {
-                if(!e instanceof InvalidMode)
-                {
-                    console.log(e);
-                    throw new Error(e.message);
-                }
-                console.log(e);
-
-                error.innerHTML = e.message;
-            }
-           
+            let normalizer = new Normalizer();
+            let normalized = normalizer.normalize(float,dualNumber.complete,dualNumber.floatingPoint)
+            // console.log(dualNumber);
+            console.log(normalized);
+            // console.log(converter);
+            
 
         });
     </script>

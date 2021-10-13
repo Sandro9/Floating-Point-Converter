@@ -1,17 +1,19 @@
-import Mantisse from "./Mantisse.js";
-import Character from "./Character.js";
-import DualHandler from "./DualHandler.js";
-
+import Mantisse from "../Interfaces/Mantisse.js";
+import Character from "../Interfaces/Character.js";
+import DualHandler from "../Handlers/DualHandler.js";
+import Sign from "../Interfaces/Sign.js";
+import LengthController from "./LengthController.js";
 
 export default class Normalizer
 {
     character = new Character();
     mantisse = new Mantisse();
     dualHandler = new DualHandler();
+    lengthController = new LengthController();
 
-
-    normalize(dualNumber,floatingPoint)
+    normalize(type,dualNumber,floatingPoint)
     {
+        //Type must be instance of Double or Float
         var index = this.findFirstOne(dualNumber);
         var offset = floatingPoint - index;
         var bias = 127;
@@ -24,12 +26,16 @@ export default class Normalizer
 
         console.log(bias);
         console.log(index);
-        var biasBinary = this.dualHandler.convert(bias,"dual");
+        var biasBinary = this.dualHandler.convertToDual(bias);
+
+        //now check Length 
+
+        biasBinary = this.lengthController.control(biasBinary.complete,type.data.character,"character");
         console.log(biasBinary);
         this.character.setCharacter(
             {
-                complete: biasBinary.complete,
-                length: biasBinary.beforeComma.number.length
+                complete: biasBinary,
+                length: biasBinary.length
             });
         
         var mantisse = {
@@ -42,15 +48,18 @@ export default class Normalizer
                 mantisse.complete.push(e);
             }
         });
+        mantisse.complete = this.lengthController.control(mantisse.complete,type.data.mantisse,"mantisse");
         mantisse.length = mantisse.complete.length;
         this.mantisse.setMantisse(mantisse);
 
         return {
-            character : this.character,
-            mantisse : this.mantisse,
+            character : this.character.character.dual,
+            mantisse : this.mantisse.mantisse.dual,
 
         }
     } 
+
+    
 
     denormalizer(dualNumber,floatingPoint)
     {

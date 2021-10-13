@@ -1,4 +1,4 @@
-export default class InvalidMode
+export default class InvalidConverterType
 {
     constructor(message)
     {

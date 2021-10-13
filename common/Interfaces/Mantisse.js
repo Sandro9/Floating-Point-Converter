@@ -1,7 +1,7 @@
 export default class Mantisse
 {
     mantisse = {
-        length: 0,
+        length: null,
         dual: []
     }
 
