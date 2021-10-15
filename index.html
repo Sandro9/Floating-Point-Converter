@@ -152,14 +152,20 @@
                     </h2>
                     <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
-                            At first convert your decimal number into a binary number
-                            <span>We devide our decimal number before comma by 2 the rest is our binary digit</span>
-                            <div id="resultStep1"></div>
-                            <div >We get the following binary digit: <span id="resultStep1Result"></span></div>
+                            <div class="bs-callout bs-callout-info">
+                                <h4>At first convert your decimal number into binary</h4>
+                                We devide our decimal number before comma by 2 the rest is our binary digit
+                            </div>
+                            <div id="resultStep1" class=""></div>
+                            <div class="bs-callout bs-callout-info">
+                                We get the following binary digit: <span class="badge rounded-pill bg-marked" id="resultStep1Result"></span>
+                            </div>
                             <br>
-                            <span>We do the same for the after comma, this time we multiply by 2</span>
+                            <div class="bs-callout bs-callout-info">We do the same for the after comma, this time we multiply by 2</div>
                             <div id="resultStep2"></div>
-                            <div>After we did that we get the following result: <span id="resultStep2Result"></span></div>
+                            <div class="bs-callout bs-callout-info">
+                                After we did that we get the following result: <span class="badge rounded-pill bg-marked" id="resultStep2Result"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -221,12 +227,22 @@
             let converterFactory = new ConverterFactory();
             let converter = converterFactory.getConverter("dual");
             let dualNumber = converter.convertToDual(number,((event) => {
+                var wrapper = document.createElement("div");
+                wrapper.classList.add("row","text-center");
                 if(event.type === 'beforeComma'){
                     // console.log(event);
-                    resultStep1.innerHTML += event.currentNr + " / " + 2 +" =" + (event.currentNr / 2) + " R "+event.rest + "<br>";
+                    resultStep1.appendChild(wrapper);
+                    wrapper.innerHTML = `<div class='col-md-3'>${event.currentNr} / 2</div>
+                                        <div class='col-md-3'><i class='fas fa-arrow-right'></i></div>
+                                        <div class='col-md-3'>${(event.currentNr / 2)}</div>
+                                        <div class='col-md-3'>R ${event.rest}</div>`;
                 } else {
                     // console.log(event);
-                    resultStep2.innerHTML += event.currentNr + " * " + 2 + " =" + parseFloat(event.currentNr * 2).toPrecision(2) + " R "+ event.rest + "<br>";
+                    resultStep2.appendChild(wrapper);
+                    wrapper.innerHTML = `<div class='col-md-3'>${event.currentNr} * 2</div>
+                                        <div class='col-md-3'><i class='fas fa-arrow-right'></i></div>
+                                        <div class='col-md-3'>${parseFloat(event.currentNr * 2).toPrecision(2)}</div>
+                                        <div class='col-md-3'>R ${event.rest}</div>`;
                 }
             }));
             resultStep1Result.innerHTML = dualNumber.beforeComma.number.binary.join("");
