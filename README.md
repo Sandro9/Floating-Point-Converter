@@ -7,7 +7,9 @@ Please note that this tool is still under development, some things might not wor
 
 ![image](https://user-images.githubusercontent.com/78750208/137482386-7a364797-ab0c-4b90-ad63-8d477232d211.png)
 In step 1 the tool explains how to convert a decimal number into a dual number step by step.
-In step 2 how the bias is calculated and how the floating point works(character)
-At least we combine our character and the mantissa - thats the actual value which is stored on your disk.
+
+![image](https://user-images.githubusercontent.com/78750208/137492739-f4a815aa-c314-4fc2-b232-1e40b21228fe.png)
+
+In step 2 how the exponent is calculated and how the float/double is actually stored
 
 
