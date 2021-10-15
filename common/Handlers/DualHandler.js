@@ -23,32 +23,35 @@ export default class DualHandler extends Handler
         }
         
     }
+
     afterComma(number,callback)
     {
         var dual = new DualNumber();
         var round = 0;
-
         while(number != 0 && round < 60)
         {
-            number = number * 2;
-            if(number > 1) 
+            
+            console.log(number);
+            if(number * 2 > 1)
             {
-                number--;
                 dual.add(1);
                 var dualNumber = 1;
-
             } else {
                 dual.add(0);
-                var dualNumber = 0;
-
-            
+                var dualNumber = 0;  
             }
+
             callback({
                 type:"afterComma",
                 round: round,
-                number: dualNumber,
-                currentNr: number
+                rest: dualNumber ?? 0,
+                currentNr: parseFloat(number).toPrecision(2)
             });
+            number = number * 2;
+            if(dualNumber == 1)
+            {
+                number--;
+            }
             round++;
         }
         return dual;
@@ -59,6 +62,7 @@ export default class DualHandler extends Handler
 
         var round = 0;
         var dual = new DualNumber();
+        
         while(number != 0 && round < 60)
         {
             if(number % 2 > 0) 
@@ -72,8 +76,7 @@ export default class DualHandler extends Handler
             callback({
                 type:"beforeComma",
                 round: round,
-                number: dualNumber,
-                rest : number % 2,
+                rest : dualNumber,
                 currentNr: number
             });
             number = parseInt(number / 2);

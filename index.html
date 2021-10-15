@@ -222,9 +222,11 @@
             let converter = converterFactory.getConverter("dual");
             let dualNumber = converter.convertToDual(number,((event) => {
                 if(event.type === 'beforeComma'){
+                    // console.log(event);
                     resultStep1.innerHTML += event.currentNr + " / " + 2 +" =" + (event.currentNr / 2) + " R "+event.rest + "<br>";
                 } else {
-                    resultStep2.innerHTML += parseFloat(event.currentNr).toPrecision(2) + " * " + 2 + " =" + parseFloat(event.currentNr * 2).toPrecision(2) + " R "+ event.number + "<br>";
+                    // console.log(event);
+                    resultStep2.innerHTML += event.currentNr + " * " + 2 + " =" + parseFloat(event.currentNr * 2).toPrecision(2) + " R "+ event.rest + "<br>";
                 }
             }));
             resultStep1Result.innerHTML = dualNumber.beforeComma.number.binary.join("");
