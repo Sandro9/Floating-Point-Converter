@@ -1,6 +1,6 @@
 # Floating-Point-Converter
 Enter a decimal number to calculate the floating Point in dual or hexadecimal
-![image](https://user-images.githubusercontent.com/78750208/137482329-877386c6-a726-4b92-a818-7fa26cde22f5.png)
+![image](https://user-images.githubusercontent.com/78750208/137492935-b4ffc508-2a08-4a64-8a5b-aca55b04a6ac.png)
 
 
 Please note that this tool is still under development, some things might not work yet or some bugs may occour.
