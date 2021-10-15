@@ -32,7 +32,6 @@ export default class DualHandler extends Handler
         while(number != 0 && round < 60)
         {
             
-            console.log(number);
             if(number * 2 > 1)
             {
                 dual.add(1);

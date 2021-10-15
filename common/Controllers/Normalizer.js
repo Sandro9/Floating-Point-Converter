@@ -11,32 +11,41 @@ export default class Normalizer
     dualHandler = new DualHandler();
     lengthController = new LengthController();
 
-    normalize(type,dualNumber,floatingPoint)
+    normalize(type,dualNumber,floatingPoint,callback = ((e) => {}))
     {
         //Type must be instance of Double or Float
         var index = this.findFirstOne(dualNumber);
         var offset = floatingPoint - index;
-        var bias = 127;
+        var character = type.data.bias;
         if(index > floatingPoint)
         {
-            bias = bias - offset;
+            character = character - offset;
         } else {
-            bias = bias + offset;
+            character = character + offset;
         }
-
-        console.log(bias);
+        
+        console.log(character);
         console.log(index);
-        var biasBinary = this.dualHandler.convertToDual(bias);
 
+        var characterBinary = this.dualHandler.convertToDual(character);
         //now check Length 
+        characterBinary = this.lengthController.control(characterBinary.complete,type.data.character,"character");
+        
+        callback({
+            type:"calculateCharacter",
+            defaultBias : type.data.bias,
+            characterCalculated : character,
+            characterBin: characterBinary,   
+            dualNumber: dualNumber, 
+            offset : offset, 
+            floatingPoint : floatingPoint ?? 0
+        });
 
-        biasBinary = this.lengthController.control(biasBinary.complete,type.data.character,"character");
-        console.log(biasBinary);
         this.character.setCharacter(
-            {
-                complete: biasBinary,
-                length: biasBinary.length
-            });
+        {
+            complete: characterBinary,
+            length: characterBinary.length
+        });
         
         var mantisse = {
             length: 0,
@@ -51,7 +60,7 @@ export default class Normalizer
         mantisse.complete = this.lengthController.control(mantisse.complete,type.data.mantisse,"mantisse");
         mantisse.length = mantisse.complete.length;
         this.mantisse.setMantisse(mantisse);
-
+        
         return {
             character : this.character.character.dual,
             mantisse : this.mantisse.mantisse.dual,

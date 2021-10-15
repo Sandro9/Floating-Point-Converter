@@ -176,20 +176,23 @@
                     </button>
                     </h2>
                     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                        Test <div id="resultStep2"></div>
-                    </div>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingThree">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Step 3:
-                    </button>
-                    </h2>
-                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                    </div>
+                     <div class="accordion-body">
+                            <div class="bs-callout bs-callout-info">
+                                <h4>Now we calculate the Exponent / Character</h4>
+                                first we need the exponent float E = (2^8-1) - 1 = 127 <br>
+                                for double E = (2^11-1) -1 = 1023
+                                Now look for the first 1 in our dual number <span  class="badge rounded-pill bg-marked" id="resultStep3DualNumber"></span><br>
+                                We found it at position : <span class="badge rounded-pill bg-marked" id ="resultStep3Position"></span> from our delimiter <br>
+                                Now you add the position to the exponent which we selected thats, so we get <span class ="badge rounded-pill bg-marked" id="resultStep3"></span>
+                            </div>
+                            Transform the Exponent into binary, we get <span class="badge rounded-pill bg-marked" id="resultStep3Result"></span>
+                            
+                            <br>
+                            <div class="bs-callout bs-callout-info">
+                                Select the left dual number where we found the first 1 and add them together.<br>
+                                The Result we get is the actual Value which is stored. : <span id="resultStep4"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -207,7 +210,13 @@
 
         var resultStep2 = document.getElementById("resultStep2");
         var resultStep2Result = document.getElementById("resultStep2Result");
-        var resultStep3 = document.getElementById("resultStep2");
+        
+        var resultStep3 = document.getElementById("resultStep3");
+        var resultStep3Result = document.getElementById("resultStep3Result");
+        var resultStep3DualNumber = document.getElementById("resultStep3DualNumber");
+        var resultStep3Position = document.getElementById("resultStep3Position");
+
+        var resultStep4 = document.getElementById("resultStep4");
         var error = document.getElementById("error");
         var input = document.getElementById("decimal");
 
@@ -248,9 +257,20 @@
             resultStep1Result.innerHTML = dualNumber.beforeComma.number.binary.join("");
             resultStep2Result.innerHTML = dualNumber.afterComma.number.binary.join("");
             console.log(dualNumber);
+
+
             let normalizer = new Normalizer();
-            let normalized = normalizer.normalize(float,dualNumber.complete,dualNumber.floatingPoint)
-            console.log(normalized);
+            let normalized = normalizer.normalize(float,dualNumber.complete,dualNumber.floatingPoint, ((event) => {
+                console.log(event);
+                if(event.type == 'calculateCharacter')
+                {
+                    resultStep3DualNumber.innerText = event.dualNumber.join("");
+                    resultStep3Position.innerText = event.offset;
+                    resultStep3.innerText = event.characterCalculated;
+                    resultStep3Result.innerText = event.characterBin.join("");
+                }
+            }));
+            resultStep4.innerText = (normalized.character.join(""))+"|"+ (normalized.mantisse.join(""));
 
 
             setCheckBoxes("e",normalized.character);
