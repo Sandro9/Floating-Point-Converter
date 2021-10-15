@@ -14,6 +14,7 @@ export default class DualHandler extends Handler
     {
         var numberSplitted = this.splitString(number);
         var beforeComma = this.beforeComma(numberSplitted.beforeComma,callback);
+        beforeComma.show().reverse();
         var afterComma = this.afterComma("0."+numberSplitted.afterComma,callback);
         return {
             beforeComma: beforeComma,
@@ -45,9 +46,10 @@ export default class DualHandler extends Handler
                 type:"afterComma",
                 round: round,
                 rest: dualNumber ?? 0,
-                currentNr: parseFloat(number).toPrecision(2)
+                currentNr: parseFloat(number).toPrecision(1)
             });
             number = number * 2;
+            number = number.toPrecision(2);
             if(dualNumber == 1)
             {
                 number--;
